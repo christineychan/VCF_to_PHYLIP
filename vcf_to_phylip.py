@@ -1,44 +1,53 @@
 # This python script coverts vcf files into phylip format
 
-from scipy.sparse import coo_matrix 
 from sys import argv
 import tempfile 
+import gzip 
 
-# Set up temporary files for data to be pushed into 
-with tempfile.NamedTemporaryFile() as temp:
-	temp.name: vcf
-
+# Main Function 
 def VCF_parser(vcf_file_name)
 	sample_count = 0
-	# Obtain and open VCF file 
-	vcf = open(vcf_file_name, 'r')
-	# Take the VCF file and skip over the metadata (lines start with '##')
-	for line in vcf:
-		if line.startswith('##'):
-			pass 
-	# Take the VCF file and skip over metadata (lines start with '#')
-		elif line.startswith('#'):
-		# Identify the sample names and VCF headers if the line starts with '#'
-			samples = line.split()[9:]
-			for i in samples:
-				sequence[i] = ""
-				sample_count += 1 
-		# Parse the row for genotypes 
-		else:
-		# Array of all of the reference alleles and alternative alleles
-			alleles = ",".join(line[3:4])
+	# Set up temporary files for data to be pushed into 
+	with tempfile.NamedTemporaryFile() as vcf:
+		try:
+			vcf = gzip.open('vcf_file_name.txt.gz', 'r')
+			return VCF_data(vcf)
+		except IOError:
+			print "Error: File does not seem to exist"
+			 
+	# Array of all of the reference alleles and alternative alleles
+	alleles = ",".join(line[3:4])
+	# Parse the row for genotypes
+	genotypes = line.strip().split()[9:]
 
+	for i in genotypes:
+			i = i.replace("|", "")
 	# Samples there are in the file (max) 
 	return sample_count 
 	# Find the total length of the genome sequences 
 	return len(sequence)
 
+	vcf.close()
+
+def VCF_data(vcf)
+	for line in vcf:
+		# Take the VCF file and skip over metadata (lines start with '##')
+		if line.startswith('##'):
+			pass 
+		# Identify the sample names and VCF headers if the line starts with '#'
+		elif line.startswith('#'):
+			samples = line.split()[9:]
+			for i in samples:
+				sequence[i] = ""
+				sample_count += 1 
+
 def VCF_parse_row(row, samples)
-	# Make an array for the genotypes
-	genotypes = line.strip().split()[9:]
-			for i in genotypes:
-				i = i.replace("|", "")
-	# Make a sparse matrix with coo_matrix 
+	# Make a sparse matrix row for the genotypes for each sample
+		# Create a matrix that adjusts the parameters (sequence length and sample)
+		#
+	# Replace '1' in sparse matrix row with ALT alleles 
+	# Include REF alleles within the sequence 
+	
 	
 def phylip_format(sequences)
 	# Create a dictionary and push information 
