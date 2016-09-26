@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-in_file = "/Users/christinechan/Desktop/VCF_to_PHYLIP project/test/input.txt"
+in_file = "input.txt"
 
 fh = open(in_file, "r")
 
