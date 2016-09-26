@@ -47,7 +47,7 @@ def VCF_parse_row(matrix, alleles, genotypes):
 		# Create a matrix that adjusts the parameters (sequence length and sample)
 	# Replace '1' in sparse matrix row with ALT alleles 
 	# Include REF alleles within the sequence 
-	
+	return false
 	
 # def phylip_format(sequences):
 	# Create a dictionary and push information 
