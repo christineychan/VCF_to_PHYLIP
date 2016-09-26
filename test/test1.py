@@ -4,9 +4,10 @@ in_file = "/Users/christinechan/Desktop/VCF_to_PHYLIP project/test/input.txt"
 
 fh = open(in_file, "r")
 
-samples = ''
-ref = ''
-alt = ''
+samples = []
+ref = []
+alt = []
+genotypes=[]
 
 for line in fh:
     if '##' in line:
@@ -14,12 +15,15 @@ for line in fh:
     elif '#' in line:
         samples = line.strip().split()[9:]
     else:
-        for line in fh:
-            ref = line.strip().split()[3:]
-            alt = line.st rip().split()[4:]
-
+        line=line.strip('\n')
+        line=line.split('\t')
+        genotypes.extend(line[9:])
+        ref.extend(line[3:4])
+        alt.extend(line[4:5])
+        
 print ref
-print alt
+#print alt
 print samples
+print genotypes
         
 fh.close()
