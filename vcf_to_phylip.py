@@ -1,39 +1,51 @@
 # This python script coverts vcf files into phylip format
 
 from sys import argv
-import tempfile 
+import zipfile
 import gzip 
+import tempfile
 
 # Main Function 
 def VCF_parser(vcf_file_name):
-	sample_count = 0
+	samples = []
+	ref = []
+	alt = []
+	genotypes =[]
+
 	# Set up temporary files for data to be pushed into 
 	with tempfile.NamedTemporaryFile() as vcf:
 		try:
-			vcf = gzip.open(vcf_file_name, 'r') 
-			return VCF_data(vcf) 
+			fh = open(vcf_file_name, 'r')
+			#vcf = zipfile.ZipFile(fh)
+			for line in vcf:
+				if '##' in line:
+					pass
+				elif '#' in line:
+					samples = line.strip().split()[9:]
+				else:
+					line=line.strip('\n')
+					line=line.split('\t')
+                    # Parse the row for genotypes
+					genotypes.extend(line[9:])
+                    # Array of all of the reference alleles and alternative alleles
+					ref.extend(line[3:4])
+					alt.extend(line[4:5])
 		except IOError:
 			print "Error: File does not seem to exist"
-			 
-	# Array of all of the reference alleles and alternative alleles
-	refAlleles = ",".join(line[3:])
-	altAlleles = ",".join(line[4:])
-	# Parse the row for genotypes
-	genotypes = line.strip().split()[9:]
-
-	for i in genotypes:
-			i = i.replace("|", "")
+			
+	#for i in genotypes:
+			#i = i.replace("|", "")
 	# Samples there are in the file (max) 
-	return sample_count 
+	return len(samples)
 	# Find the total length of the genome sequences 
-	return len(sequence)
+	#return len(genotypes)
 
 	vcf.close()
 
-def VCF_data(vcf):
+def vcf_data(vcf):
 	for line in vcf:
 		# Take the VCF file and skip over metadata (lines start with '##')
-		if line.startswith('##'):
+		if '##' in line:
 			pass 
 		# Identify the sample names and VCF headers if the line starts with '#'
 		elif line.startswith('#'):

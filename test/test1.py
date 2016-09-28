@@ -22,7 +22,7 @@ for line in fh:
         alt.extend(line[4:5])
         
 print ref
-#print alt
+print alt
 print samples
 print genotypes
         
