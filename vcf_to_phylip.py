@@ -1,8 +1,6 @@
-# This python script coverts vcf files into phylip format
-
+#!/usr/bin/python
 from sys import argv
 import zipfile
-import gzip 
 import tempfile
 
 # Main Function 
@@ -16,8 +14,8 @@ def VCF_parser(vcf_file_name):
 	with tempfile.NamedTemporaryFile() as vcf:
 		try:
 			fh = open(vcf_file_name, 'r')
-			#vcf = zipfile.ZipFile(fh)
-			for line in vcf:
+			#fh = zipfile.ZipFile(fh)
+			for line in fh:
 				if '##' in line:
 					pass
 				elif '#' in line:
@@ -25,41 +23,32 @@ def VCF_parser(vcf_file_name):
 				else:
 					line=line.strip('\n')
 					line=line.split('\t')
-                    # Parse the row for genotypes
-					genotypes.extend(line[9:])
                     # Array of all of the reference alleles and alternative alleles
 					ref.extend(line[3:4])
 					alt.extend(line[4:5])
+					# Parse the row for genotypes
+					genotypes.append(line[9:])
 		except IOError:
 			print "Error: File does not seem to exist"
+
+	for g in genotypes:
+		for x in g:
+			x = x.replace("|",",")
 			
-	#for i in genotypes:
-			#i = i.replace("|", "")
-	# Samples there are in the file (max) 
-	return len(samples)
+
+	return genotypes
 	# Find the total length of the genome sequences 
-	#return len(genotypes)
+	# Samples there are in the file (max) 
 
 	vcf.close()
 
-def vcf_data(vcf):
-	for line in vcf:
-		# Take the VCF file and skip over metadata (lines start with '##')
-		if '##' in line:
-			pass 
-		# Identify the sample names and VCF headers if the line starts with '#'
-		elif line.startswith('#'):
-			samples = line.split()[9:]
-			for i in samples:
-				sequence[i] = ""
-				sample_count += 1 
 
-def VCF_parse_row(matrix, alleles, genotypes):
+#def VCF_parse_row(matrix, alleles, genotypes):
 	# Make a sparse matrix row for the genotypes for each sample
 		# Create a matrix that adjusts the parameters (sequence length and sample)
 	# Replace '1' in sparse matrix row with ALT alleles 
 	# Include REF alleles within the sequence 
-	return false
+	#return false
 	
 # def phylip_format(sequences):
 	# Create a dictionary and push information 
@@ -69,6 +58,7 @@ def VCF_parse_row(matrix, alleles, genotypes):
 # Create an if statement that executes both functions and then closes 
 # the temporary files 
 
+print VCF_parser('input.txt')
 
 
 
