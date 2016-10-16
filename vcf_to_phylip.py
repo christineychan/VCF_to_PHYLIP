@@ -10,7 +10,10 @@ def VCF_parser(vcf_file_name):
 	ref = []
 	alt = []
 	genotypes =[]
-	value = []
+	matrix = [[],[],[]]
+	alleles = []
+	counter = -1
+	max = 0
 	# Set up temporary files for data to be pushed into 
 	with tempfile.NamedTemporaryFile() as vcf:
 		try:
@@ -25,20 +28,30 @@ def VCF_parser(vcf_file_name):
 					line=line.strip('\n')
 					line=line.split('\t')
                     # Array of all of the reference alleles and alternative alleles
-					ref.extend(line[3:4])
-					alt.extend(line[4:5])
-					list1 = line[9:]
-					list3 = []
-					for l in list1:
-						l = l.split('|')
-						for x in l:
-							list3.append(x)
-					# Parse the row for genotypes
-					genotypes.append(list3)
+					ref = ''.join(line[3:4])
+					alt = ''.join(line[4:5])
+					# Calculate maximum allele length 
+					if len(ref) < len(alt):
+						ref = ref + "-" * (len(alt)-1)
+					else:
+						alt = alt + "-" * (len(ref)-1)
+					# Start of matrix 
+					counter +=1
+					counter2 =-1
+					for i in line[9:]:
+						i = i.split('|')
+						for x in i:
+							counter2 +=1
+							if x == '0':
+								pass
+							elif x == '1':
+								matrix[0].append(counter)  # Rows
+								matrix[1].append(counter2) # Columns
+								matrix[2].append(int(x))   # Values	
 		except IOError:
 			print "Error: File does not seem to exist"
-	return parse_value(genotypes, value)
 
+	return matrix
 	# Find the total length of the genome sequences 
 	# Samples there are in the file (max) 
 
@@ -52,14 +65,6 @@ def VCF_parser(vcf_file_name):
 	# Include REF alleles within the sequence 
 	#return false
 
-def parse_value(genotypes, value):
-	for g in range(len(genotypes)):
-		for i in range(len(genotypes[x])):
-			if i == '0':
-				pass
-			elif i == '1':
-				value.append(i)
-	return value
 
 # def phylip_format(sequences):
 	# Create a dictionary and push information 
