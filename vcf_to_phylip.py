@@ -40,34 +40,19 @@ def VCF_parse_row(line, alleles, matrix):
 	line=line.strip('\n')
 	line=line.split('\t')
 	# Array of all of the reference alleles and alternative alleles
-	# Converts list into str
 	alleles.append(line[3:5])
-	
-	#max_length=max(map(len, alleles))
-	#max_length=max(alleles, key=len)
-	#max_length=max(len(x) for x in alleles)
+	# Finds max allele length in allele array 
+	max_length = map(lambda allele: max(map(lambda x: len(x), allele)) ,alleles)
 
-	max_length=max(map(lambda x: x, alleles))
-	print max_length
-	# for x in alleles:
-	# 	print len
-	# 	if int(len(x)) < max_length:
-	# 		x = x+('-'* int(max_length))
-	# 		print x
-	#ref = ''.join(line[3:4])
-	#alt = ''.join(line[4:5])
+	for x in alleles:
+		if int(len(x)) < max_length:
+			x = x+('-'* int(max_length))
+			print x
 
-	# Calculate maximum allele length 
-	# if len(ref) < len(alt):
-	# 	ref = ref + "-" * (len(alt)-1)
-	# else:
-	# 	alt = alt + "-" * (len(ref)-1)
-	# alleles.append(ref)
-	# alleles.append(alt)
 	# Start of matrix 
-	row +=1
 	counter =-1
 	for i in line[9:]:
+		row += 1
 		i = i.split('|')
 		for x in i:
 			counter +=1
