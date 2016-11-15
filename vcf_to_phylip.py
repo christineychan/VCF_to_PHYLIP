@@ -13,6 +13,7 @@ def VCF_parser(vcf_file_name):
 	genotypes =[]
 	matrix = [[],[],[]]
 	max = 0
+	rows = 0
 	# Set up temporary files for data to be pushed into 
 	with tempfile.NamedTemporaryFile() as vcf:
 		try:
@@ -24,19 +25,19 @@ def VCF_parser(vcf_file_name):
 				elif '#' in line:
 					samples = line.strip().split()[9:]
 				else:
-					VCF_parse_row(line,alleles,matrix)
+					rows +=1 
+					VCF_parse_row(line,alleles,matrix,rows)
 					
 		except IOError:
 			print "Error: File does not seem to exist"
 
-	return alleles
+	return matrix
 	# Find the total length of the genome sequences 
 	# Samples there are in the file (max) 
 
 	vcf.close()
 
-def VCF_parse_row(line, alleles, matrix):
-	row = -1
+def VCF_parse_row(line, alleles, matrix, rows):
 	line=line.strip('\n')
 	line=line.split('\t')
 	# Array of all of the reference alleles and alternative alleles
@@ -50,18 +51,17 @@ def VCF_parse_row(line, alleles, matrix):
 			allele[a] = allele[a]+('-'* int(max_length-int(len(allele[a]))))
 
 	# Start of matrix 
-	counter =-1
+	columns = 0
 	for i in line[9:]:
-		row += 1
 		i = i.split('|')
 		for x in i:
-			counter +=1
 			if x == '0':
 				pass
 			elif x == '1':
-				matrix[0].append(row)  # Rows
-				matrix[1].append(counter) # Columns
-				matrix[2].append(int(x))   # Values	
+				matrix[0].append(rows)    # Rows
+				matrix[1].append(columns) # Columns
+				matrix[2].append(int(x))  # Values	
+			columns +=1
 	#return alleles
 
 # def phylip_format(sequences):
