@@ -42,12 +42,12 @@ def VCF_parse_row(line, alleles, matrix):
 	# Array of all of the reference alleles and alternative alleles
 	alleles.append(line[3:5])
 	# Finds max allele length in allele array 
-	max_length = map(lambda allele: max(map(lambda x: len(x), allele)) ,alleles)
+	for allele in alleles:
+		max_length = max(map(lambda a: len(a),allele))
 
-	for x in alleles:
-		if int(len(x)) < max_length:
-			x = x+('-'* int(max_length))
-			print x
+	for a in range(len(allele)):
+		if int(len(allele[a])) < max_length:
+			allele[a] = allele[a]+('-'* int(max_length-int(len(allele[a]))))
 
 	# Start of matrix 
 	counter =-1
@@ -63,7 +63,6 @@ def VCF_parse_row(line, alleles, matrix):
 				matrix[1].append(counter) # Columns
 				matrix[2].append(int(x))   # Values	
 	#return alleles
-
 
 # def phylip_format(sequences):
 	# Create a dictionary and push information 
