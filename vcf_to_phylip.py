@@ -3,14 +3,10 @@
 import zipfile
 import tempfile
 
-
 # Main Function 
 def VCF_parser(vcf_file_name):
 	samples = []
-	ref = []
-	alt = []
 	alleles = []
-	genotypes =[]
 	matrix = [[],[],[]]
 	max = 0
 	rows = 0
@@ -25,13 +21,16 @@ def VCF_parser(vcf_file_name):
 				elif '#' in line:
 					samples = line.strip().split()[9:]
 				else:
-					rows +=1 
 					VCF_parse_row(line,alleles,matrix,rows)
+					rows +=1 
 					
 		except IOError:
 			print "Error: File does not seem to exist"
+	
+	sortedcol = parse_matrix(alleles,matrix)
 
-	return matrix
+	#return parse_matrix(alleles, matrix)
+
 	# Find the total length of the genome sequences 
 	# Samples there are in the file (max) 
 
@@ -62,7 +61,11 @@ def VCF_parse_row(line, alleles, matrix, rows):
 				matrix[1].append(columns) # Columns
 				matrix[2].append(int(x))  # Values	
 			columns +=1
-	#return alleles
+
+def parse_matrix(alleles, matrix):
+	# Returns the index of the original column array in sorted order 
+	return [i[0] for i in sorted(enumerate(matrix[1]), key=lambda x:x[1])]
+	
 
 # def phylip_format(sequences):
 	# Create a dictionary and push information 
