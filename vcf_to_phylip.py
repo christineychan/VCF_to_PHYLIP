@@ -8,6 +8,7 @@ def VCF_parser(vcf_file_name):
 	samples = []
 	alleles = []
 	matrix = [[],[],[]]
+	sequence = ()
 	max = 0
 	rows = 0
 	# Set up temporary files for data to be pushed into 
@@ -28,8 +29,19 @@ def VCF_parser(vcf_file_name):
 			print "Error: File does not seem to exist"
 	
 	sortedcol = parse_matrix(alleles,matrix)
+	# for x in [alleles[i] for i in matrix[0]]:
+	# 	print x
+	# 	for y in [x[i] for i in matrix[2]]:
+	# 		print y 
 
-	#return parse_matrix(alleles, matrix)
+	# Goes through each column in order
+	for x in [matrix[1][i] for i in sortedcol]:
+		
+		# Goes through each row in order
+		for y in [matrix[0][i] for i in sortedcol]:
+			print (alleles[y][1])
+
+
 
 	# Find the total length of the genome sequences 
 	# Samples there are in the file (max) 
